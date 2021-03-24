@@ -1,0 +1,100 @@
+version: "2.0"
+services:
+  indexer:
+    image: iart/indexer
+    build: indexer
+
+    network_mode: "host"
+    volumes:
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/models/
+        target: /models
+
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/cache/
+        target: /cache
+
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/faiss/
+        target: /faiss
+
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/dump/
+        target: /dump
+
+      - type: bind
+        source: ./indexer/config.json
+        target: /config.json
+  redisai:
+    build:
+      context: https://github.com/RedisAI/RedisAI.git #2c3239e
+    network_mode: "host"
+
+  elasticsearch:
+    image: elasticsearch:7.9.1
+
+    network_mode: "host"
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+
+    volumes:
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/elasticsearch/
+        target: /usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65530
+        hard: 65530
+
+  mysql:
+    image: mysql:8.0.23
+    environment:
+      - MYSQL_ROOT_PASSWORD=FnwpP50M
+
+  api:
+    image: iart/api
+    build:
+      context: .
+
+    network_mode: "host"
+    volumes:
+      - type: bind
+        # TODO change path
+        #source: /data/iart/web/collections/artigo/img/
+        source: /data/iart/web/media/
+        target: /media
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/upload/
+        target: /upload
+      - type: bind
+        # TODO change path
+        source: ./src/iart_web
+        target: /iart_web
+
+    working_dir: /iart_web
+    environment:
+      - POETRY_VIRTUALENVS_CREATE=False
+      - PYTHONPATH=/
+    command: python3 manage.py runserver  0.0.0.0:8000
+
+  web:
+    image: iart/web
+    build:
+      context: vue
+
+    volumes:
+      - type: bind
+        source: ./src/iart_web
+        target: /iart_web
+
+    network_mode: "host"

@@ -1,0 +1,9 @@
+[submodule "api"]
+	path = api
+	url = git@git.tib.eu:iart/api.git
+[submodule "indexer"]
+	path = indexer
+	url = git@git.tib.eu:iart/indexer.git
+[submodule "web"]
+	path = web
+	url = git@git.tib.eu:iart/web.git
