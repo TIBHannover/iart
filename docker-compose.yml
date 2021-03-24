@@ -2,7 +2,8 @@ version: "2.0"
 services:
   indexer:
     image: iart/indexer
-    build: indexer
+    build:
+      context: ./indexer
 
     network_mode: "host"
     volumes:
@@ -63,7 +64,7 @@ services:
   api:
     image: iart/api
     build:
-      context: .
+      context: ./api
 
     network_mode: "host"
     volumes:
@@ -78,7 +79,7 @@ services:
         target: /upload
       - type: bind
         # TODO change path
-        source: ./src/iart_web
+        source: ./api/src/iart_web
         target: /iart_web
 
     working_dir: /iart_web
@@ -90,11 +91,12 @@ services:
   web:
     image: iart/web
     build:
-      context: vue
+      context: ./web
 
     volumes:
       - type: bind
-        source: ./src/iart_web
-        target: /iart_web
+        source: ./web/
+        target: /web
 
+    working_dir: /web
     network_mode: "host"
