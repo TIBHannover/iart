@@ -30,6 +30,17 @@ services:
       - type: bind
         source: ./indexer/config.json
         target: /config.json
+
+      # Development mount
+      - type: bind
+        source: ./indexer/
+        target: /indexer
+      
+    working_dir: /indexer/src/iart_indexer
+    environment:
+      - POETRY_VIRTUALENVS_CREATE=False
+      - PYTHONPATH=/indexer/src/
+    command: python3 -m iart_indexer --mode server -v -c /config.json
   redisai:
     build:
       context: https://github.com/RedisAI/RedisAI.git #2c3239e
@@ -77,15 +88,15 @@ services:
         # TODO change path
         source: /data/iart/web/upload/
         target: /upload
+      # Development mount
       - type: bind
-        # TODO change path
-        source: ./api/src/iart_web
-        target: /iart_web
+        source: ./api/
+        target: /api
 
-    working_dir: /iart_web
+    working_dir: /api/src/iart_web
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/
+      - PYTHONPATH=/api/src/
     command: python3 manage.py runserver  0.0.0.0:8000
 
   web:
