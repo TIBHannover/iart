@@ -67,10 +67,15 @@ services:
         soft: 65530
         hard: 65530
 
-  mysql:
-    image: mysql:8.0.23
+  postgres:
+    image: postgres:13.2
+    network_mode: "host"
+    volumes:
+      - /data/iart/web/db/:/var/lib/postgresql/data
     environment:
-      - MYSQL_ROOT_PASSWORD=FnwpP50M
+      - POSTGRES_DB=iart
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
   api:
     image: iart/api
@@ -98,6 +103,9 @@ services:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/api/src/
     command: python3 manage.py runserver  0.0.0.0:8000
+
+    depends_on:
+      - postgres
 
   web:
     image: iart/web
