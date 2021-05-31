@@ -14,6 +14,11 @@ services:
 
       - type: bind
         # TODO change path
+        source: /data/iart/web/tmp/
+        target: /tmp
+        
+      - type: bind
+        # TODO change path
         source: /data/iart/web/cache/
         target: /cache
 
@@ -107,6 +112,41 @@ services:
     depends_on:
       - postgres
 
+  # We will use redisai as redis server
+  # redis:
+  #   image: "redis:6.2.3"
+  #   network_mode: "host"
+    
+  celery:
+    image: iart/api
+    build:
+      context: ./api
+
+    network_mode: "host"
+    volumes:
+      - type: bind
+        # TODO change path
+        #source: /data/iart/web/collections/artigo/img/
+        source: /data/iart/web/media/
+        target: /media
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/upload/
+        target: /upload
+      # Development mount
+      - type: bind
+        source: ./api/
+        target: /api
+
+    working_dir: /api/src/iart_web
+    environment:
+      - POETRY_VIRTUALENVS_CREATE=False
+      - PYTHONPATH=/api/src/
+    command: celery -A iart worker -l INFO
+
+    depends_on:
+      - postgres
+    
   web:
     image: iart/web
     build:
