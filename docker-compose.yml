@@ -46,6 +46,53 @@ services:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/indexer/src/
     command: python3 -m iart_indexer --mode server -v -c /config.json
+
+  faiss_indexer:
+    image: iart/indexer
+    build:
+      context: ./indexer
+
+    network_mode: "host"
+    volumes:
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/models/
+        target: /models
+
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/tmp/
+        target: /tmp
+        
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/cache/
+        target: /cache
+
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/faiss/
+        target: /faiss
+
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/dump/
+        target: /dump
+
+      - type: bind
+        source: ./indexer/config.json
+        target: /config.json
+
+      # Development mount
+      - type: bind
+        source: ./indexer/
+        target: /indexer
+      
+    working_dir: /indexer/src/iart_indexer
+    environment:
+      - POETRY_VIRTUALENVS_CREATE=False
+      - PYTHONPATH=/indexer/src/
+    command: python3 -m iart_indexer --mode faiss_server -v -c /config.json
   redisai:
     build:
       context: https://github.com/RedisAI/RedisAI.git #2c3239e
