@@ -203,6 +203,14 @@ services:
       - type: bind
         source: ./web/
         target: /web
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/media/
+        target: /media
+      - type: bind
+        # TODO change path
+        source: /data/iart/web/upload/
+        target: /upload
 
     working_dir: /web
     network_mode: "host"
