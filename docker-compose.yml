@@ -45,6 +45,8 @@ services:
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/indexer/src/
+      # - GRPC_VERBOSITY=debug
+      # - GRPC_TRACE=call_error,connectivity_state,pick_first,round_robin,glb
     command: python3 -m iart_indexer --mode server -v -c /config.json
 
   faiss_indexer:
@@ -92,10 +94,13 @@ services:
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/indexer/src/
+      # - GRPC_VERBOSITY=debug
+      # - GRPC_TRACE=call_error,connectivity_state,pick_first,round_robin,glb
     command: python3 -m iart_indexer --mode faiss_server -v -c /config.json
   redisai:
-    build:
-      context: https://github.com/RedisAI/RedisAI.git #2c3239e
+    image:  redislabs/redisai:edge-cpu-bionic
+    # build:
+    #  context: https://github.com/RedisAI/RedisAI.git#2c3239e
     network_mode: "host"
 
   elasticsearch:
