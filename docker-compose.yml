@@ -134,6 +134,11 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
+  memcached:
+    image: memcached:1.6.10-buster
+    network_mode: "host"
+    command: -I 32m
+
   api:
     image: iart/api
     build:
@@ -163,6 +168,7 @@ services:
 
     depends_on:
       - postgres
+      - memcached
 
   # We will use redisai as redis server
   # redis:
@@ -198,7 +204,9 @@ services:
 
     depends_on:
       - postgres
+      - memcached
     
+
   web:
     image: iart/web
     build:
