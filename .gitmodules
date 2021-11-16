@@ -1,9 +1,9 @@
-[submodule "api"]
-	path = api
-	url = git@git.tib.eu:iart/api.git
+[submodule "backend"]
+	path = backend
+	url = git@github.com:TIBHannover/iart-backend.git
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:TIBHannover/iart-frontend.git
 [submodule "indexer"]
 	path = indexer
-	url = git@git.tib.eu:iart/indexer.git
-[submodule "web"]
-	path = web
-	url = git@git.tib.eu:iart/web.git
+	url = git@github.com:TIBHannover/iart-indexer.git
