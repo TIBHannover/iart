@@ -139,10 +139,10 @@ services:
     network_mode: "host"
     command: -I 32m
 
-  api:
-    image: iart/api
+  backend:
+    image: iart/backend
     build:
-      context: ./api
+      context: ./backend
 
     network_mode: "host"
     volumes:
@@ -157,13 +157,13 @@ services:
         target: /upload
       # Development mount
       - type: bind
-        source: ./api/
-        target: /api
+        source: ./backend/
+        target: /backend
 
-    working_dir: /api/src/iart_web
+    working_dir: /backend/src/iart_web
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/api/src/
+      - PYTHONPATH=/backend/src/
     command: python3 manage.py runserver  0.0.0.0:8000
 
     depends_on:
@@ -176,9 +176,9 @@ services:
   #   network_mode: "host"
     
   celery:
-    image: iart/api
+    image: iart/backend
     build:
-      context: ./api
+      context: ./backend
 
     network_mode: "host"
     volumes:
@@ -193,13 +193,13 @@ services:
         target: /upload
       # Development mount
       - type: bind
-        source: ./api/
-        target: /api
+        source: ./backend/
+        target: /backend
 
-    working_dir: /api/src/iart_web
+    working_dir: /backend/src/iart_web
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/api/src/
+      - PYTHONPATH=/backend/src/
     command: celery -A iart worker -l INFO
 
     depends_on:
@@ -207,15 +207,15 @@ services:
       - memcached
     
 
-  web:
-    image: iart/web
+  frontend:
+    image: iart/frontend
     build:
-      context: ./web
+      context: ./frontend
 
     volumes:
       - type: bind
-        source: ./web/
-        target: /web
+        source: ./frontend/
+        target: /frontend
       - type: bind
         # TODO change path
         source: /data/iart/web/media/
@@ -225,5 +225,5 @@ services:
         source: /data/iart/web/upload/
         target: /upload
 
-    working_dir: /web
+    working_dir: /frontend
     network_mode: "host"
