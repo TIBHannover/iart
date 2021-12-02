@@ -1,4 +1,6 @@
 *
 !db/
+!examples/
+!examples/*
 !elasticsearch/
 !.gitignore

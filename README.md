@@ -1,4 +1,4 @@
-# *iART* – An Interactive Analysis- and Retrieval-Tool for the Support of Image-Oriented Research Processes
+# *iART*
 
 ![](images/iart-salvator.png)
 
@@ -31,6 +31,29 @@ At a later point there will be a docker container provided here.
     wget https://tib.eu/cloud/s/idRNbs6EJ5LKea6/download/models_cpu.tar.gz
     tar -xf models_cpu.tar.gz --directory data
     ```
+
+3. Build and start the container:
+    ```sh
+    sudo docker-compose up --build
+    ```
+
+    If you get an `AccessDeniedException` on the ElasticSearch instance, type:
+    ```sh
+    sudo chown -R 1000:1000 ./data/elasticsearch
+    ```
+
+4. For demonstration purposes, index `./data/examples/wikipedia_small.jsonl`: 
+    ```sh
+    sudo docker-compose exec indexer python -m iart_indexer --m client --task indexing --path /data/examples/wikipedia_small.jsonl --image_paths /data/media
+    ```
+
+5. Install and build frontend packages:
+    ```sh
+    sudo docker-compose exec frontend npm install
+    sudo docker-compose exec frontend npm run build
+    ```
+
+    The frontend instance can be found at `http://localhost/`.
 
 
 ## About the project
