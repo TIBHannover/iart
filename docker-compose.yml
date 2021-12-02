@@ -5,17 +5,14 @@ services:
     image: iart/indexer
     build:
       context: ./indexer
-
     network_mode: "host"
     volumes:
       - type: bind
-        # TODO change path
         source: ./data/
         target: /data/
       - type: bind
         source: ./indexer/
         target: /indexer/
-
     working_dir: /indexer/src/iart_indexer
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
@@ -26,17 +23,14 @@ services:
     image: iart/indexer
     build:
       context: ./indexer
-
     network_mode: "host"
     volumes:
       - type: bind
-        # TODO change path
         source: ./data/
         target: /data/
       - type: bind
         source: ./indexer/
         target: /indexer/
-      
     working_dir: /indexer/src/iart_indexer
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
@@ -44,16 +38,14 @@ services:
     command: python3 -m iart_indexer --mode faiss_server -v -c /indexer/config.json
 
   redisai:
-    image:  redislabs/redisai:edge-cpu-bionic
-    network_mode: "host"
+    image: redislabs/redisai:edge-cpu-bionic
+    ports:
+      - "127.0.0.1:6379:6379"
 
   elasticsearch:
     image: elasticsearch:7.9.1
-
-    network_mode: "host"
     volumes:
       - type: bind
-        # TODO change path
         source: ./data/elasticsearch/
         target: /usr/share/elasticsearch/data
     environment:
@@ -66,10 +58,12 @@ services:
       nofile:
         soft: 65530
         hard: 65530
+    ports:
+      - "127.0.0.1:9300:9300"
+      - "127.0.0.1:9200:9200"
 
   postgres:
     image: postgres:13.2
-    network_mode: "host"
     volumes:
       - ./data/db/:/var/lib/postgresql/data
     environment:
@@ -77,34 +71,33 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - PGDATA=/var/lib/postgresql/data/data/
+    ports:
+      - "127.0.0.1:5432:5432"
 
   memcached:
     image: memcached:1.6.10-buster
-    network_mode: "host"
     command: -I 32m
+    ports:
+      - "127.0.0.1:11211:11211"
 
   backend:
     image: iart/backend
     build:
       context: ./backend
-
     network_mode: "host"
     volumes:
       - type: bind
-        # TODO change path
         source: ./data/
         target: /data
       # Development mount
       - type: bind
         source: ./backend/
         target: /backend
-
     working_dir: /backend/src/iart_web
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/backend/src/
-    command: python3 manage.py runserver  0.0.0.0:8000
-
+    command: python3 manage.py runserver 0.0.0.0:8000
     depends_on:
       - postgres
       - memcached
@@ -113,24 +106,20 @@ services:
     image: iart/backend
     build:
       context: ./backend
-
     network_mode: "host"
     volumes:
       - type: bind
-        # TODO change path
         source: ./data/
         target: /data
       # Development mount
       - type: bind
         source: ./backend/
         target: /backend
-
     working_dir: /backend/src/iart_web
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/backend/src/
     command: celery -A iart worker -l INFO
-
     depends_on:
       - postgres
       - memcached
@@ -139,15 +128,12 @@ services:
     image: iart/frontend
     build:
       context: ./frontend
-
+    network_mode: "host"
     volumes:
       - type: bind
         source: ./frontend/
         target: /frontend
       - type: bind
-        # TODO change path
         source: ./data/
         target: /data
-
     working_dir: /frontend
-    network_mode: "host"
