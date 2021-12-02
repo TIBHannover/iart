@@ -1,6 +1,6 @@
 # *iART* – An Interactive Analysis- and Retrieval-Tool for the Support of Image-Oriented Research Processes
 
-![](images/iart.png)
+![](images/iart-salvator.png)
 
 
 ## Overview
