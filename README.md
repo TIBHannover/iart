@@ -72,4 +72,4 @@ iART was funded by the [DFG](https://gepris.dfg.de/gepris/projekt/415796915) fro
 
 ## Contributing
 
-Please report issues, feature requests, and questions to the [GitHub issue tracker](https://github.com/TIBHannover/iart/issues).
+Please report issues, feature requests, and questions to the [GitHub issue tracker](https://github.com/TIBHannover/iart/issues). We have a [Contributor Code of Conduct](https://github.com/TIBHannover/iart/blob/master/CODE_OF_CONDUCT.md). By participating in iART you agree to abide by its terms.
