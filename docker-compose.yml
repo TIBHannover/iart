@@ -89,7 +89,6 @@ services:
       - type: bind
         source: ./data/
         target: /data
-      # Development mount
       - type: bind
         source: ./backend/
         target: /backend
@@ -111,7 +110,6 @@ services:
       - type: bind
         source: ./data/
         target: /data
-      # Development mount
       - type: bind
         source: ./backend/
         target: /backend

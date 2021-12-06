@@ -51,7 +51,7 @@ At a later point there will be a docker container provided here.
     sudo docker-compose exec indexer python -m iart_indexer --m client --task indexing --path /data/examples/wikipedia_small.jsonl --image_paths /data/media
     ```
 
-    Wait until the "docker-compose up" process finishes indexing (this may take a few minutes). After that, an index must be created for faster searching and all existing images must be imported into the new index.
+    Wait until the `docker-compose up` process finishes indexing (this may take a few minutes). After that, an index must be created for faster searching and all existing images must be imported into the new index.
     
     ```sh
     sudo docker-compose exec indexer python -m iart_indexer -m client --task faiss_train --port 50151  
@@ -65,11 +65,11 @@ At a later point there will be a docker container provided here.
 
 
 ### Code reloading
-Hot reloading is enabled for `backend`. To display `frontend` changes, run:
+Hot reloading is enabled for `backend`. To display frontend changes, run:
 ```sh
 sudo docker-compose exec frontend npm run build
 ```
-Alternativly, use `serve` to enable a hot reloaded instance on `http://localhost:8080/`:
+Alternatively, use `serve` to enable a hot reloaded instance on `http://localhost:8080/`:
 ```sh
 sudo docker-compose exec frontend npm run serve
 ```
