@@ -51,6 +51,16 @@ At a later point there will be a docker container provided here.
     sudo docker-compose exec indexer python -m iart_indexer --m client --task indexing --path /data/examples/wikipedia_small.jsonl --image_paths /data/media
     ```
 
+    Wait until the "docker-compose up" process finishes indexing (this may take a few minutes). After that, an index must be created for faster searching and all existing images must be imported into the new index.
+    
+    ```sh
+    sudo docker-compose exec indexer python -m iart_indexer -m client --task faiss_train --port 50151  
+    ```
+
+    ```sh
+    sudo docker compose exec indexer python -m iart_indexer -m client --task faiss_indexing --port 50151 
+    ```
+
 6. Go to the frontend instance at `http://localhost/`.
 
 
