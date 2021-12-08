@@ -17,12 +17,7 @@ services:
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/indexer/src/
-    command: python3 -m iart_indexer --mode server -v -c /indexer/config.json
-    deploy:
-      resources:
-        reservations:
-          devices:
-          -  capabilities: [gpu]
+    command: python3 -m iart_indexer --mode server -v -c /indexer/config.gpu.json
 
   faiss_indexer:
     image: iart/indexer
@@ -40,17 +35,17 @@ services:
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/indexer/src/
-    command: python3 -m iart_indexer --mode faiss_server -v -c /indexer/config.json
+    command: python3 -m iart_indexer --mode faiss_server -v -c /indexer/config.gpu.json
+
+  redisai:
+    image: redislabs/redisai:1.2.3-gpu-xenial
+    ports:
+      - "127.0.0.1:6379:6379"
     deploy:
       resources:
         reservations:
           devices:
           -  capabilities: [gpu]
-
-  redisai:
-    image: redislabs/redisai:edge-cpu-bionic
-    ports:
-      - "127.0.0.1:6379:6379"
 
   elasticsearch:
     image: elasticsearch:7.9.1
