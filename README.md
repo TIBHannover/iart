@@ -30,12 +30,14 @@ At a later point there will be a docker container provided here.
 
 2. Run `install.sh` to download and extract models:
     ```sh
-    bash install.sh
+    bash install.sh  # CPU
+    bash install.gpu.sh  # GPU
     ```
 
 3. Build and start the container:
     ```sh
-    sudo docker-compose up --build
+    sudo docker-compose up --build  # CPU
+    sudo docker-compose -f docker-compose.gpu.yml up --build  # GPU
     ```
 
 4. Apply database migrations and build frontend packages:
