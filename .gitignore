@@ -1,2 +1,3 @@
 .vscode/
 data/models/*
+*.tar.gz*
