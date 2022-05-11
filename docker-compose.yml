@@ -115,6 +115,8 @@ services:
         target: /backend
     working_dir: /backend/src/iart_backend
     environment:
+      - GRPC_ENABLE_FORK_SUPPORT=1
+      - GRPC_POLL_STRATEGY=poll
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/backend/src/
     command: celery -A iart worker -l INFO
