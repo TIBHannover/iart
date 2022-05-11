@@ -45,7 +45,7 @@ services:
       resources:
         reservations:
           devices:
-          -  capabilities: [gpu]
+            - capabilities: [ gpu ]
 
   elasticsearch:
     image: elasticsearch:7.9.1
@@ -98,7 +98,7 @@ services:
       - type: bind
         source: ./backend/
         target: /backend
-    working_dir: /backend/src/iart_web
+    working_dir: /backend/src/iart_backend
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/backend/src/
@@ -120,7 +120,7 @@ services:
       - type: bind
         source: ./backend/
         target: /backend
-    working_dir: /backend/src/iart_web
+    working_dir: /backend/src/iart_backend
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/backend/src/
@@ -128,7 +128,7 @@ services:
     depends_on:
       - postgres
       - memcached
-    
+
   frontend:
     image: iart/frontend
     build:

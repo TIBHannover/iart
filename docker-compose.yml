@@ -8,7 +8,7 @@ services:
     network_mode: "host"
     volumes:
       - type: bind
-        source: /data/iart/web/
+        source: ./data/
         target: /data/
       - type: bind
         source: ./indexer/
@@ -26,7 +26,7 @@ services:
     network_mode: "host"
     volumes:
       - type: bind
-        source: /data/iart/web/
+        source: ./data/
         target: /data/
       - type: bind
         source: ./indexer/
@@ -46,7 +46,7 @@ services:
     image: elasticsearch:7.9.1
     volumes:
       - type: bind
-        source: /data/iart/web/elasticsearch/
+        source: ./data/elasticsearch/
         target: /usr/share/elasticsearch/data
     environment:
       - xpack.security.enabled=false
@@ -65,7 +65,7 @@ services:
   postgres:
     image: postgres:13.2
     volumes:
-      - /data/iart/web/db/:/var/lib/postgresql/data
+      - ./data/db/:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=iart
       - POSTGRES_USER=postgres
@@ -87,16 +87,15 @@ services:
     network_mode: "host"
     volumes:
       - type: bind
-        source: /data/iart/web/
+        source: ./data/
         target: /data
       - type: bind
         source: ./backend/
         target: /backend
-    working_dir: /backend/src/iart_web
+    working_dir: /backend/src/iart_backend
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/backend/src/
-      - IART_BACKEND_CONFIG=/backend/config.json
     command: python3 manage.py runserver 0.0.0.0:8000
     depends_on:
       - postgres
@@ -109,7 +108,7 @@ services:
     network_mode: "host"
     volumes:
       - type: bind
-        source: /data/iart/web/
+        source: ./data/
         target: /data
       - type: bind
         source: ./backend/
@@ -122,7 +121,7 @@ services:
     depends_on:
       - postgres
       - memcached
-    
+
   frontend:
     image: iart/frontend
     build:
@@ -133,6 +132,6 @@ services:
         source: ./frontend/
         target: /frontend
       - type: bind
-        source: /data/iart/web/
+        source: ./data/
         target: /data
     working_dir: /frontend
