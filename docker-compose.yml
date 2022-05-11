@@ -113,7 +113,7 @@ services:
       - type: bind
         source: ./backend/
         target: /backend
-    working_dir: /backend/src/iart_web
+    working_dir: /backend/src/iart_backend
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/backend/src/
