@@ -96,12 +96,12 @@ services:
         target: /data
       # Development mount
       - type: bind
-        source: ./backend/
-        target: /backend
-    working_dir: /backend/src/iart_backend
+        source: ./backend/src/iart_backend/
+        target: /app/iart_backend/
+    working_dir: /app/iart_backend
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/backend/src/
+      - PYTHONPATH=/app/
     command: python3 manage.py runserver 0.0.0.0:8000
     depends_on:
       - postgres
@@ -118,14 +118,14 @@ services:
         target: /data
       # Development mount
       - type: bind
-        source: ./backend/
-        target: /backend
-    working_dir: /backend/src/iart_backend
+        source: ./backend/src/iart_backend/
+        target: /app/iart_backend/
+    working_dir: /app/iart_backend
     environment:
       - GRPC_ENABLE_FORK_SUPPORT=1
       - GRPC_POLL_STRATEGY=poll
       - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/backend/src/
+      - PYTHONPATH=/app/
     command: celery -A iart worker -l INFO
     depends_on:
       - postgres
