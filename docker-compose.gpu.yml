@@ -1,6 +1,15 @@
 version: "2.0"
 
 services:
+  qdrant:
+    image: qdrant/qdrant:v1.1.2
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - type: bind
+        source: ./data/qdrant
+        target: /qdrant/storage
+
   indexer:
     image: iart/indexer
     build:
@@ -19,26 +28,8 @@ services:
       - PYTHONPATH=/indexer/src/
     command: python3 -m iart_indexer --mode server -v -c /indexer/config.gpu.json
 
-  faiss_indexer:
-    image: iart/indexer
-    build:
-      context: ./indexer
-    network_mode: "host"
-    volumes:
-      - type: bind
-        source: ./data/
-        target: /data/
-      - type: bind
-        source: ./indexer/
-        target: /indexer/
-    working_dir: /indexer/src/iart_indexer
-    environment:
-      - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/indexer/src/
-    command: python3 -m iart_indexer --mode faiss_server -v -c /indexer/config.gpu.json
-
   redisai:
-    image: redislabs/redisai:edge-gpu-bionic
+    image: redislabs/redisai:1.2.7-gpu-bionic
     ports:
       - "127.0.0.1:6379:6379"
     deploy:
@@ -98,6 +89,9 @@ services:
       - type: bind
         source: ./backend/src/iart_backend/
         target: /app/iart_backend/
+      - type: bind
+        source: /home/springsteinm/sshfs/
+        target: /mnt/
     working_dir: /app/iart_backend
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
