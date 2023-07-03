@@ -1,6 +1,14 @@
 version: "2.0"
 
 services:
+  qdrant:
+    image: qdrant/qdrant:v1.1.2
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - type: bind
+        source: ./data/qdrant
+        target: /qdrant/storage
   indexer:
     image: iart/indexer
     build:
@@ -18,24 +26,6 @@ services:
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/indexer/src/
     command: python3 -m iart_indexer --mode server -v -c /indexer/config.json
-
-  faiss_indexer:
-    image: iart/indexer
-    build:
-      context: ./indexer
-    network_mode: "host"
-    volumes:
-      - type: bind
-        source: ./data/
-        target: /data/
-      - type: bind
-        source: ./indexer/
-        target: /indexer/
-    working_dir: /indexer/src/iart_indexer
-    environment:
-      - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/indexer/src/
-    command: python3 -m iart_indexer --mode faiss_server -v -c /indexer/config.json
 
   redisai:
     image: redislabs/redisai:edge-cpu-bionic
