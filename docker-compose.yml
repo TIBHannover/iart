@@ -82,10 +82,13 @@ services:
       - type: bind
         source: ./backend/
         target: /backend
+      - type: bind
+        source: ./indexer/
+        target: /indexer
     working_dir: /backend/src/iart_backend
     environment:
       - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/backend/src/
+      - PYTHONPATH=/backend/src/:/indexer/src/
     command: python3 manage.py runserver 0.0.0.0:8000
     depends_on:
       - postgres
@@ -103,12 +106,15 @@ services:
       - type: bind
         source: ./backend/
         target: /backend
+      - type: bind
+        source: ./indexer/
+        target: /indexer
     working_dir: /backend/src/iart_backend
     environment:
       - GRPC_ENABLE_FORK_SUPPORT=1
       - GRPC_POLL_STRATEGY=poll
       - POETRY_VIRTUALENVS_CREATE=False
-      - PYTHONPATH=/backend/src/
+      - PYTHONPATH=/backend/src/:/indexer/src/
     command: celery -A iart worker -l INFO
     depends_on:
       - postgres
