@@ -44,7 +44,7 @@ At a later point there will be a docker container provided here.
     ```sh
     sudo docker-compose exec backend python3 manage.py migrate auth
     sudo docker-compose exec backend python3 manage.py migrate
-    sudo docker-compose exec frontend npm install
+    sudo docker-compose exec frontend npm install --force
     sudo docker-compose exec frontend npm run build
     ```
 
