@@ -9,28 +9,32 @@ services:
       - type: bind
         source: ./data/qdrant
         target: /qdrant/storage
+
   indexer:
     image: iart/indexer
     build:
       context: ./indexer
     network_mode: "host"
+
     volumes:
       - type: bind
         source: ./data/
         target: /data/
       - type: bind
+        source: ./data/ray/
+        target: /tmp/ray/
+      - type: bind
+        source: ./data/models/
+        target: /models/
+      - type: bind
         source: ./indexer/
         target: /indexer/
     working_dir: /indexer/src/iart_indexer
     environment:
+      - HF_HOME=/models
       - POETRY_VIRTUALENVS_CREATE=False
       - PYTHONPATH=/indexer/src/
     command: python3 -m iart_indexer --mode server -v -c /indexer/config.json
-
-  redisai:
-    image: redislabs/redisai:edge-cpu-bionic
-    ports:
-      - "127.0.0.1:6379:6379"
 
   elasticsearch:
     image: elasticsearch:7.9.1
